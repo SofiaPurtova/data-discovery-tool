@@ -268,7 +268,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 Data Discovery Tool</h1>
+            <h1>Data Discovery Tool</h1>
             <p>Поиск данных в SQLite и CSV файлах</p>
         </div>
 
@@ -282,7 +282,7 @@
         </div>
 
         <div class="sources-section">
-            <h2>📊 Источники данных</h2>
+            <h2>Источники данных</h2>
             <div id="sources" class="sources-grid"></div>
         </div>
     </div>
@@ -314,14 +314,14 @@
             }
 
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="loading">🔍 Поиск...</div>';
+            resultsDiv.innerHTML = '<div class="loading">Поиск...</div>';
 
             try {
                 const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
                 const results = await response.json();
 
                 if (results.length === 0) {
-                    resultsDiv.innerHTML = '<div class="error">❌ Ничего не найдено</div>';
+                    resultsDiv.innerHTML = '<div class="error">Ничего не найдено</div>';
                     return;
                 }
 
@@ -339,7 +339,7 @@
                             <div class="result-source">Источник: ${r.source_id}</div>
                             <div class="result-meta">
                                 <span>Строк: ${r.row_count}</span>
-                                <a class="schema-link" onclick="showSchema('${r.source_id}', '${r.path}')">📊 Схема</a>
+                                <a class="schema-link" onclick="showSchema('${r.source_id}', '${r.path}')">Схема</a>
                             </div>
                         </div>
                     `;
@@ -347,7 +347,7 @@
 
                 resultsDiv.innerHTML = html;
             } catch (error) {
-                resultsDiv.innerHTML = '<div class="error">❌ Ошибка при поиске</div>';
+                resultsDiv.innerHTML = '<div class="error"> Ошибка при поиске</div>';
             }
         }
 
@@ -376,7 +376,7 @@
                                 ${s.last_indexed ? `<div>Индексирован: ${new Date(s.last_indexed).toLocaleString()}</div>` : ''}
                             </div>
                             <button class="index-button" onclick="indexSource('${s.id}')">
-                                🔄 Индексировать
+                                Индексировать
                             </button>
                         </div>
                     `;
@@ -396,13 +396,13 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert(`✅ ${result.message}`);
+                    alert(`${result.message}`);
                     loadSources();  // Обновляем список источников
                 } else {
-                    alert(`❌ Ошибка: ${result.error}`);
+                    alert(`Ошибка: ${result.error}`);
                 }
             } catch (error) {
-                alert('❌ Ошибка при индексации');
+                alert('Ошибка при индексации');
             }
         }
 
@@ -418,12 +418,12 @@
                 const schema = await response.json();
 
                 if (schema.error) {
-                    content.innerHTML = `<div class="error">❌ ${schema.error}</div>`;
+                    content.innerHTML = `<div class="error">${schema.error}</div>`;
                     return;
                 }
 
                 let html = `
-                    <h2>📊 ${schema.table_name}</h2>
+                    <h2>${schema.table_name}</h2>
                     <p>Источник: ${schema.source_id} | Строк: ${schema.row_count}</p>
                     <table class="column-table">
                         <thead>
@@ -449,7 +449,7 @@
                 html += '</tbody></table>';
                 content.innerHTML = html;
             } catch (error) {
-                content.innerHTML = '<div class="error">❌ Ошибка загрузки схемы</div>';
+                content.innerHTML = '<div class="error"> Ошибка загрузки схемы</div>';
             }
         }
 

@@ -105,12 +105,12 @@ def create_sqlite_db():
     conn.commit()
     conn.close()
     
-    print("✅ SQLite база создана: data/sample.db")
+    print("SQLite база создана: data/sample.db")
 
 
 def create_csv_files():
     """Создание тестовых CSV файлов"""
-    print("\n📁 Создание CSV файлов...")
+    print("\nСоздание CSV файлов...")
     
     os.makedirs('data', exist_ok=True)
     
@@ -126,7 +126,7 @@ def create_csv_files():
     
     df = pd.DataFrame(employees_data)
     df.to_csv('data/employees.csv', index=False, encoding='utf-8')
-    print("✅ Создан: data/employees.csv")
+    print("Создан: data/employees.csv")
     
     # 2. Отделы (departments.csv)
     departments_data = {
@@ -138,7 +138,7 @@ def create_csv_files():
     
     df = pd.DataFrame(departments_data)
     df.to_csv('data/departments.csv', index=False, encoding='utf-8')
-    print("✅ Создан: data/departments.csv")
+    print("Создан: data/departments.csv")
     
     # 3. Продажи (sales.csv)
     import random
@@ -160,18 +160,18 @@ def create_csv_files():
     
     df = pd.DataFrame(sales_data)
     df.to_csv('data/sales.csv', index=False, encoding='utf-8')
-    print("✅ Создан: data/sales.csv")
+    print("Создан: data/sales.csv")
 
 
 if __name__ == '__main__':
-    print("🚀 Создание тестовых данных...")
+    print("Создание тестовых данных...")
     print("=" * 40)
     
     create_sqlite_db()
     create_csv_files()
     
     print("\n" + "=" * 40)
-    print("✅ Все тестовые данные созданы!")
-    print("📂 Папка data содержит:")
+    print("Все тестовые данные созданы!")
+    print("Папка data содержит:")
     for f in os.listdir('data'):
         print(f"   - {f}")

@@ -2,7 +2,7 @@
 Модуль поиска по проиндексированным метаданным.
 Позволяет искать таблицы и колонки по ключевым словам.
 """
-
+import os
 from typing import List, Dict, Any, Optional
 from index.indexer import Indexer
 from index.models import Table, Column
@@ -54,9 +54,9 @@ class SearchResult:
     
     def __repr__(self):
         if self.match_type == 'table':
-            return f"📋 Таблица: {self.table.name} (в {self.table.source_id})"
+            return f"Таблица: {self.table.name} (в {self.table.source_id})"
         else:
-            return f"🔍 Колонка: {self.table.name}.{self.column.name} (в {self.table.source_id})"
+            return f"Колонка: {self.table.name}.{self.column.name} (в {self.table.source_id})"
 
 
 class Searcher:
@@ -159,6 +159,10 @@ class Searcher:
         Returns:
             Словарь с описанием таблицы или None
         """
+        # Нормализуем путь
+        if '\\' in table_path or '/' in table_path:
+            table_path = os.path.basename(table_path)
+
         table = self.indexer.get_table(source_id, table_path)
         if not table:
             return None

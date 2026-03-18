@@ -2,7 +2,7 @@
 Индексатор для сбора метаданных из всех подключенных источников.
 Управляет коннекторами и хранит проиндексированные данные.
 """
-
+import os
 from typing import Dict, List, Optional
 from datetime import datetime
 from connectors.sqlite import SQLiteConnector
@@ -47,7 +47,7 @@ class Indexer:
             tables=[]
         )
         
-        print(f"✅ Добавлен источник: {source_id} ({source_type})")
+        print(f"Добавлен источник: {source_id} ({source_type})")
     
     def index_source(self, source_id: str) -> Optional[Source]:
         """
@@ -68,12 +68,12 @@ class Indexer:
         connector = self.connectors[source_id]
         source = self.sources[source_id]
         
-        print(f"🔄 Индексация источника: {source_id}...")
+        print(f"Индексация источника: {source_id}...")
         
         try:
             # Подключаемся к источнику
             if not connector.connect():
-                print(f"❌ Не удалось подключиться к {source_id}")
+                print(f"Не удалось подключиться к {source_id}")
                 return None
             
             # Получаем список таблиц
@@ -94,14 +94,14 @@ class Indexer:
             source.tables = tables
             source.last_indexed = datetime.now()
             
-            print(f"✅ Источник {source_id} успешно проиндексирован")
-            print(f"   Всего таблиц: {len(tables)}")
-            print(f"   Время индексации: {source.last_indexed.strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"Источник {source_id} успешно проиндексирован")
+            print(f"Всего таблиц: {len(tables)}")
+            print(f"Время индексации: {source.last_indexed.strftime('%Y-%m-%d %H:%M:%S')}")
             
             return source
             
         except Exception as e:
-            print(f"❌ Ошибка индексации {source_id}: {e}")
+            print(f"Ошибка индексации {source_id}: {e}")
             return None
             
         finally:
@@ -194,10 +194,21 @@ class Indexer:
         if not source:
             return None
         
-        for table in source.tables:
-            if table.path == table_path:
-                return table
+        # Нормализуем путь для поиска
+        search_path = table_path.replace('/', '\\').lower()
+        search_name = os.path.basename(search_path)  # Получаем только имя файла
         
+        for table in source.tables:
+            # Сравниваем по разным вариантам
+            table_path_norm = table.path.replace('/', '\\').lower()
+            table_name = os.path.basename(table_path_norm)
+            
+            if (table.path == table_path or 
+                table_path_norm == search_path or 
+                table_name == search_name or
+                table.name == table_path):
+                return table
+    
         return None
     
     def remove_source(self, source_id: str) -> bool:
@@ -214,7 +225,7 @@ class Indexer:
             del self.sources[source_id]
         if source_id in self.connectors:
             del self.connectors[source_id]
-        print(f"🗑️ Источник {source_id} удален")
+        print(f"Источник {source_id} удален")
         return True
     
     def get_stats(self) -> Dict:

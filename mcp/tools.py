@@ -60,9 +60,9 @@ class MCPTool:
                     except Exception as e:
                         print(f"Ошибка загрузки источника {source_data.get('id')}: {e}")
                         
-                print(f"📂 Загружено {len(state.get('sources', []))} источников из {self.state_file}")
+                print(f"Загружено {len(state.get('sources', []))} источников из {self.state_file}")
             except Exception as e:
-                print(f"⚠️ Ошибка загрузки состояния: {e}")
+                print(f"Ошибка загрузки состояния: {e}")
 
     def _save_state(self):
         """Сохранить состояние в файл"""
@@ -104,10 +104,10 @@ class MCPTool:
             with open(self.state_file, 'w', encoding='utf-8') as f:
                 json.dump(state, f, indent=2, ensure_ascii=False)
                 
-            print(f"💾 Состояние сохранено в {self.state_file}")
+            print(f"Состояние сохранено в {self.state_file}")
                 
         except Exception as e:
-            print(f"⚠️ Ошибка сохранения состояния: {e}")
+            print(f"Ошибка сохранения состояния: {e}")
     
     def list_sources(self) -> List[Dict[str, Any]]:
         """
@@ -190,6 +190,10 @@ class MCPTool:
         Returns:
             Схема таблицы или сообщение об ошибке
         """
+        # Для CSV файлов извлекаем только имя, если пришёл полный путь
+        if '\\' in path or '/' in path:
+            path = os.path.basename(path)
+            
         schema = self.searcher.get_table_schema(source_id, path)
         if not schema:
             return {

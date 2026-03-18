@@ -13,7 +13,7 @@ tool = MCPTool()
 
 @click.group()
 def cli():
-    """🔍 Data Discovery Tool - поиск данных в разных источниках"""
+    """Data Discovery Tool - поиск данных в разных источниках"""
     pass
 
 
@@ -23,11 +23,11 @@ def sources():
     sources = tool.list_sources()
     
     if not sources:
-        click.echo("❌ Нет добавленных источников")
+        click.echo("Нет добавленных источников")
         click.echo("   Используйте: python ui/cli.py add-sqlite --help")
         return
     
-    click.echo("\n📊 Источники данных:")
+    click.echo("\nИсточники данных:")
     click.echo("-" * 60)
     
     for s in sources:
@@ -45,15 +45,15 @@ def sources():
 @click.argument('source_id')
 def index(source_id):
     """Индексировать указанный источник"""
-    click.echo(f"🔄 Индексация источника {source_id}...")
+    click.echo(f"Индексация источника {source_id}...")
     
     result = tool.index_source(source_id)
     
     if result['success']:
-        click.echo(f"✅ {result['message']}")
+        click.echo(f"{result['message']}")
         click.echo(f"   Проиндексировано таблиц: {result['tables_indexed']}")
     else:
-        click.echo(f"❌ Ошибка: {result['error']}")
+        click.echo(f"Ошибка: {result['error']}")
 
 
 @cli.command()
@@ -67,10 +67,10 @@ def search(query, case_sensitive):
     results = tool.search(query, case_sensitive)
     
     if not results:
-        click.echo("❌ Ничего не найдено")
+        click.echo("Ничего не найдено")
         return
     
-    click.echo(f"📋 Найдено {len(results)} результатов:\n")
+    click.echo(f"Найдено {len(results)} результатов:\n")
     
     for i, r in enumerate(results, 1):
         if r['match_type'] == 'table':
@@ -93,13 +93,13 @@ def search(query, case_sensitive):
 @click.argument('path')
 def schema(source_id, path):
     """Показать схему таблицы"""
-    click.echo(f"📊 Схема таблицы {path} из {source_id}")
+    click.echo(f"Схема таблицы {path} из {source_id}")
     click.echo("-" * 60)
     
     schema = tool.get_schema(source_id, path)
     
     if 'error' in schema:
-        click.echo(f"❌ {schema['error']}")
+        click.echo(f"{schema['error']}")
         return
     
     click.echo(f"Таблица: {schema['table_name']}")
@@ -108,8 +108,8 @@ def schema(source_id, path):
     
     for col in schema['columns']:
         samples = ', '.join(str(s) for s in col['samples'][:3])
-        click.echo(f"  • {col['name']} ({col['type']})")
-        click.echo(f"    Примеры: [{samples}]")
+        click.echo(f"{col['name']} ({col['type']})")
+        click.echo(f"Примеры: [{samples}]")
 
 
 @cli.command()
@@ -120,10 +120,10 @@ def add_sqlite(source_id, db_path):
     result = tool.add_source(source_id, 'sqlite', db_path)
     
     if result['success']:
-        click.echo(f"✅ {result['message']}")
+        click.echo(f"{result['message']}")
         click.echo(f"   Теперь выполните: python ui/cli.py index {source_id}")
     else:
-        click.echo(f"❌ Ошибка: {result['error']}")
+        click.echo(f"Ошибка: {result['error']}")
 
 
 @cli.command()
@@ -134,10 +134,10 @@ def add_csv(source_id, folder_path):
     result = tool.add_source(source_id, 'csv', folder_path)
     
     if result['success']:
-        click.echo(f"✅ {result['message']}")
+        click.echo(f"{result['message']}")
         click.echo(f"   Теперь выполните: python ui/cli.py index {source_id}")
     else:
-        click.echo(f"❌ Ошибка: {result['error']}")
+        click.echo(f"Ошибка: {result['error']}")
 
 
 @cli.command()
@@ -145,7 +145,7 @@ def stats():
     """Показать статистику системы"""
     stats = tool.get_stats()
     
-    click.echo("\n📈 Статистика системы:")
+    click.echo("\nСтатистика системы:")
     click.echo("-" * 60)
     click.echo(f"Всего источников: {stats['total_sources']}")
     click.echo(f"Индексировано: {stats['indexed_sources']}")
@@ -169,7 +169,7 @@ def suggest(prefix, limit):
     if suggestions:
         click.echo("Подсказки:")
         for s in suggestions:
-            click.echo(f"  • {s}")
+            click.echo(f"{s}")
     else:
         click.echo("Нет подсказок")
 
