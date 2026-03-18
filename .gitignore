@@ -1,0 +1,26 @@
+
+```powershell
+@"
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Проект
+*.db
+*.csv
+!data/sample.db
+!data/*.csv
+mcp_state.json
+*.egg-info/
+build/
+dist/
+
+# IDE
+.vscode/
+.idea/
+"@ | Out-File -FilePath .gitignore -Encoding utf8
